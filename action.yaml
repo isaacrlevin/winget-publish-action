@@ -1,0 +1,69 @@
+name: 'Winget Publish'
+description: 'Publish Package to Winget using Winget Create'
+inputs:
+  publish-type:
+    description: 'Create or Update'
+    required: true
+    default: 'Create'
+  user:
+    description: 'User Submitting Package'
+    required: true
+    default: 'user'
+  package:
+    description: 'Name of Package being submitted'
+    required: true
+    default: 'package'
+  version:
+    description: 'Semantic Version of Package'
+    required: true
+    default: '0.0.0'
+  url:
+    description: 'Url of Installer'
+    required: true
+    default: ''
+  arch:
+    description: 'Architecture of Installer (x86, x64, arm, arm64)'
+    required: false
+    default: ''
+  installer-type:
+    description: 'Installer Type (The Windows Package Manager supports MSIX, MSI, and executable installers. Some well known formats (Inno, Nullsoft, WiX, and Burn) provide standard sets of installer switches to provide different installer experiences.)'
+    required: false
+    default: ''
+  publisher:
+    description: 'Name of the publisher for a given package'
+    required: false
+    default: ''
+  package-name:
+    description: 'The full package name to be displayed as the publisher or ISV wishes'
+    required: false
+    default: ''
+  license:
+    description: 'The license governing the use and or distribution for the product'
+    required: false
+    default: ''
+  short-description:
+    description: 'The description for a package. This will apprear with winget show commands'
+    required: false
+    default: ''
+
+ShortDescription: <DESCRIPTION>
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        echo Publish Type Specified not Create or Update
+        exit 1
+      if: ${{ (github.event.inputs.publish-type != 'Create') && (github.event.inputs.publish-type != 'Update') }}
+      shell: bash
+
+    - displayName: Use WingetCreate Update to update existing manigest
+      if: ${{ github.event.inputs.publish-type == 'Update' }}
+      run: |
+        iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+        .\wingetcreate.exe update ${{ github.event.inputs.user }}${{ github.event.inputs.package }} -u ${{ github.event.inputs.url }} -v ${{ github.event.inputs.version }} -t ${{ secrets.WINGETCREATE_TOKEN }} -s true
+
+    - displayName: Populate Winget manifest files and use WingetCreate Submit to submit manifest
+      run: .\build.ps1 -Token ${{ secrets.WINGETCREATE_TOKEN }} -User ${{ github.event.inputs.user }} -Package ${{ github.event.inputs.package }} -Url ${{ github.event.inputs.url }} -ShortDescription ${{ github.event.inputs.short-description }} -Version ${{ github.event.inputs.version }} -Arch ${{ github.event.inputs.arch }} -InstallerType ${{ github.event.inputs.installer-type }} -Publisher ${{ github.event.inputs.publisher }} -PackageName ${{ github.event.inputs.package-name }} -License ${{ github.event.inputs.license }}
+      if: ${{ github.event.inputs.publish-type == 'Create' }}
+      shell: pwsh

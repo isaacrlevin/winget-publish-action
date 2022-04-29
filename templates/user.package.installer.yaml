@@ -1,0 +1,9 @@
+PackageIdentifier: <USER>.<PACKAGE>
+PackageVersion: <VERSION>
+Installers:
+  - Architecture: <ARCH>
+    InstallerType: <INSTALLER-TYPE>
+    InstallerUrl: <URL>
+    InstallerSha256: <HASH>
+ManifestType: installer
+ManifestVersion: 1.1.0

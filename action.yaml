@@ -1,6 +1,10 @@
 name: 'Winget Publish'
 description: 'Publish Package to Winget using Winget Create'
 inputs:
+  token:
+    description: 'GitHub PAT'
+    required: true
+    default: ''
   publish-type:
     description: 'Create or Update'
     required: true
@@ -61,9 +65,9 @@ runs:
       if: ${{ github.event.inputs.publish-type == 'Update' }}
       run: |
         iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-        .\wingetcreate.exe update ${{ github.event.inputs.user }}${{ github.event.inputs.package }} -u ${{ github.event.inputs.url }} -v ${{ github.event.inputs.version }} -t ${{ secrets.WINGETCREATE_TOKEN }} -s true
+        .\wingetcreate.exe update ${{ github.event.inputs.user }}${{ github.event.inputs.package }} -u ${{ github.event.inputs.url }} -v ${{ github.event.inputs.version }} -t ${{ github.event.inputs.token }} -s true
 
     - displayName: Populate Winget manifest files and use WingetCreate Submit to submit manifest
-      run: .\build.ps1 -Token ${{ secrets.WINGETCREATE_TOKEN }} -User ${{ github.event.inputs.user }} -Package ${{ github.event.inputs.package }} -Url ${{ github.event.inputs.url }} -ShortDescription ${{ github.event.inputs.short-description }} -Version ${{ github.event.inputs.version }} -Arch ${{ github.event.inputs.arch }} -InstallerType ${{ github.event.inputs.installer-type }} -Publisher ${{ github.event.inputs.publisher }} -PackageName ${{ github.event.inputs.package-name }} -License ${{ github.event.inputs.license }}
+      run: .\build.ps1 -Token ${{ github.event.inputs.token }} -User ${{ github.event.inputs.user }} -Package ${{ github.event.inputs.package }} -Url ${{ github.event.inputs.url }} -ShortDescription ${{ github.event.inputs.short-description }} -Version ${{ github.event.inputs.version }} -Arch ${{ github.event.inputs.arch }} -InstallerType ${{ github.event.inputs.installer-type }} -Publisher ${{ github.event.inputs.publisher }} -PackageName ${{ github.event.inputs.package-name }} -License ${{ github.event.inputs.license }}
       if: ${{ github.event.inputs.publish-type == 'Create' }}
       shell: pwsh

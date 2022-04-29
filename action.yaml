@@ -64,9 +64,9 @@ runs:
     - name: Use WingetCreate Update to update existing manigest
       if: ${{ inputs.publish-type == 'Update' }}
       run: |
-        iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+        Invoke-WebRequest -Uri https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
         .\wingetcreate.exe update ${{ inputs.user }}${{ inputs.package }} -u ${{ inputs.url }} -v ${{ inputs.version }} -t ${{ inputs.token }} -s true
-      shell: bash
+      shell: pwsh
 
     - name: Populate Winget manifest files and use WingetCreate Submit to submit manifest
       run: .\build.ps1 -Token ${{ inputs.token }} -User ${{ inputs.user }} -Package ${{ inputs.package }} -Url ${{ inputs.url }} -ShortDescription ${{ inputs.short-description }} -Version ${{ inputs.version }} -Arch ${{ inputs.arch }} -InstallerType ${{ inputs.installer-type }} -Publisher ${{ inputs.publisher }} -PackageName ${{ inputs.package-name }} -License ${{ inputs.license }}

@@ -61,13 +61,14 @@ runs:
       if: ${{ (github.event.inputs.publish-type != 'Create') && (github.event.inputs.publish-type != 'Update') }}
       shell: bash
 
-    - displayName: Use WingetCreate Update to update existing manigest
+    - name: Use WingetCreate Update to update existing manigest
       if: ${{ github.event.inputs.publish-type == 'Update' }}
       run: |
         iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
         .\wingetcreate.exe update ${{ github.event.inputs.user }}${{ github.event.inputs.package }} -u ${{ github.event.inputs.url }} -v ${{ github.event.inputs.version }} -t ${{ github.event.inputs.token }} -s true
+      shell: bash
 
-    - displayName: Populate Winget manifest files and use WingetCreate Submit to submit manifest
+    - name: Populate Winget manifest files and use WingetCreate Submit to submit manifest
       run: .\build.ps1 -Token ${{ github.event.inputs.token }} -User ${{ github.event.inputs.user }} -Package ${{ github.event.inputs.package }} -Url ${{ github.event.inputs.url }} -ShortDescription ${{ github.event.inputs.short-description }} -Version ${{ github.event.inputs.version }} -Arch ${{ github.event.inputs.arch }} -InstallerType ${{ github.event.inputs.installer-type }} -Publisher ${{ github.event.inputs.publisher }} -PackageName ${{ github.event.inputs.package-name }} -License ${{ github.event.inputs.license }}
       if: ${{ github.event.inputs.publish-type == 'Create' }}
       shell: pwsh

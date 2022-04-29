@@ -55,11 +55,11 @@ ShortDescription: <DESCRIPTION>
 runs:
   using: "composite"
   steps:
-    - run: |
-        echo Publish Type Specified not Create or Update
-        exit 1
-      if: ${{ (github.event.inputs.publish-type != 'Create') && (github.event.inputs.publish-type != 'Update') }}
-      shell: bash
+    # - run: |
+    #     echo Publish Type Specified not Create or Update
+    #     exit 1
+    #   if: ${{ (github.event.inputs.publish-type != 'Create') && (github.event.inputs.publish-type != 'Update') }}
+    #   shell: bash
 
     - name: Use WingetCreate Update to update existing manigest
       if: ${{ github.event.inputs.publish-type == 'Update' }}

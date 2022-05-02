@@ -68,6 +68,6 @@ runs:
 
     - name: Populate Winget manifest files and use WingetCreate Submit to submit manifest
       run: |
-        ${{ github.action_path }}\build.ps1 -Token ${{ inputs.token }} -User ${{ inputs.user }} -Package ${{ inputs.package }} -Url ${{ inputs.url }} -ShortDescription ${{ inputs.short-description }} -Version ${{ inputs.version }} -Arch ${{ inputs.arch }} -InstallerType ${{ inputs.installer-type }} -Publisher ${{ inputs.publisher }} -PackageName ${{ inputs.package-name }} -License ${{ inputs.license }}
+        ${{ github.action_path }}\build.ps1 -Token ${{ inputs.token }} -User "${{ inputs.user }}" -Package "${{ inputs.package }}" -Url "${{ inputs.url }}" -ShortDescription "${{ inputs.short-description }}" -Version ${{ inputs.version }} -Arch "${{ inputs.arch }}" -InstallerType "${{ inputs.installer-type }}" -Publisher "${{ inputs.publisher }}" -PackageName "${{ inputs.package-name }}" -License "{{ inputs.license }}"
       if: ${{ inputs.publish-type == 'Create' }}
       shell: pwsh

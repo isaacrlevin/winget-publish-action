@@ -74,7 +74,18 @@ runs:
         $fileHash = Get-Filehash "./file"
         $Hash = $fileHash.Hash
         Get-ChildItem '${{ github.action_path }}\templates\*.yaml' | ForEach-Object -Process {
-            ${{ github.action_path }}\write-metaData.ps1 -FileName $_.Name -User ${{ inputs.user }} -Hash $Hash -Package ${{ inputs.package }} -Url ${{ inputs.url }} -ShortDescription "${{ inputs.short-description }}" -Version ${{ inputs.version }} -Arch ${{ inputs.arch }} -InstallerType ${{ inputs.installer-type }} -Publisher "${{ inputs.publisher }}" -PackageName "${{ inputs.package-name }}" -License "${{ inputs.license }}"
+            $content = Get-Content $FileName -Raw
+            $content = $content.Replace('<VERSION>', ${{ inputs.version }})
+            $content = $content.Replace('<PACKAGE>', ${{ inputs.package }})
+            $content = $content.Replace('<HASH>', $Hash)
+            $content = $content.Replace('<ARCH>', ${{ inputs.arch }})
+            $content = $content.Replace('<INSTALLER-TYPE>', ${{ inputs.installer-type }})
+            $content = $content.Replace('<URL>', ${{ inputs.url }})
+            $content = $content.Replace('<PUBLISHER>', ${{ inputs.publisher }})
+            $content = $content.Replace('<PACKAGE-NAME>', ${{ inputs.package-name }})
+            $content = $content.Replace('<LICENSE>', ${{ inputs.license }})
+            $content = $content.Replace('<DESCRIPTION>', ${{ inputs.short-description }})
+            $content | Out-File -Encoding 'UTF8' "./${{ inputs.version }}/$FileName"
         }
         if (-not $Token) {
             return

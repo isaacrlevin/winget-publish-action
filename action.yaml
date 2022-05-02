@@ -73,7 +73,7 @@ runs:
         Invoke-WebRequest -Uri ${{ inputs.url }} -OutFile "./file"
         $fileHash = Get-Filehash "./file"
         $Hash = $fileHash.Hash
-        Get-ChildItem '${{ github.action_path }}\templates\*.yaml' | ForEach-Object -Process {
+        Get-ChildItem "${{ github.action_path }}/templates/*.yaml" | ForEach-Object -Process {
             $content = Get-Content $FileName -Raw
             $content = $content.Replace('<VERSION>', "${{ inputs.version }}")
             $content = $content.Replace('<PACKAGE>', "${{ inputs.package }}")

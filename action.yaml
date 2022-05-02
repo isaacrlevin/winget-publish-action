@@ -75,16 +75,16 @@ runs:
         $Hash = $fileHash.Hash
         Get-ChildItem '${{ github.action_path }}\templates\*.yaml' | ForEach-Object -Process {
             $content = Get-Content $FileName -Raw
-            $content = $content.Replace('<VERSION>', ${{ inputs.version }})
-            $content = $content.Replace('<PACKAGE>', ${{ inputs.package }})
+            $content = $content.Replace('<VERSION>', "${{ inputs.version }}")
+            $content = $content.Replace('<PACKAGE>', "${{ inputs.package }}")
             $content = $content.Replace('<HASH>', $Hash)
-            $content = $content.Replace('<ARCH>', ${{ inputs.arch }})
-            $content = $content.Replace('<INSTALLER-TYPE>', ${{ inputs.installer-type }})
-            $content = $content.Replace('<URL>', ${{ inputs.url }})
-            $content = $content.Replace('<PUBLISHER>', ${{ inputs.publisher }})
-            $content = $content.Replace('<PACKAGE-NAME>', ${{ inputs.package-name }})
-            $content = $content.Replace('<LICENSE>', ${{ inputs.license }})
-            $content = $content.Replace('<DESCRIPTION>', ${{ inputs.short-description }})
+            $content = $content.Replace('<ARCH>', "${{ inputs.arch }}")
+            $content = $content.Replace('<INSTALLER-TYPE>', "${{ inputs.installer-type }}")
+            $content = $content.Replace('<URL>', "${{ inputs.url }}")
+            $content = $content.Replace('<PUBLISHER>', "${{ inputs.publisher }}")
+            $content = $content.Replace('<PACKAGE-NAME>', "${{ inputs.package-name }}")
+            $content = $content.Replace('<LICENSE>', "${{ inputs.license }}")
+            $content = $content.Replace('<DESCRIPTION>', "${{ inputs.short-description }}")
             $content | Out-File -Encoding 'UTF8' "./${{ inputs.version }}/$FileName"
         }
         if (-not $Token) {

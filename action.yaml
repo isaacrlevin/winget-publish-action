@@ -68,32 +68,6 @@ runs:
 
     - name: Populate Winget manifest files and use WingetCreate Submit to submit manifest
       run: |
-        New-Item -Path $PWD -Name ${{ inputs.version }} -ItemType "directory"
-        # Get all files inside the folder and adjust the version/hash
-        Invoke-WebRequest -Uri ${{ inputs.url }} -OutFile "./file"
-        $fileHash = Get-Filehash "./file"
-        $Hash = $fileHash.Hash
-        Get-ChildItem -Path ${{ github.action_path }}\templates\*.yaml | ForEach-Object -Process {
-            $content = Get-Content $FileName -Raw
-            $content = $content.Replace('<VERSION>', "${{ inputs.version }}")
-            $content = $content.Replace('<PACKAGE>', "${{ inputs.package }}")
-            $content = $content.Replace('<HASH>', $Hash)
-            $content = $content.Replace('<ARCH>', "${{ inputs.arch }}")
-            $content = $content.Replace('<INSTALLER-TYPE>', "${{ inputs.installer-type }}")
-            $content = $content.Replace('<URL>', "${{ inputs.url }}")
-            $content = $content.Replace('<PUBLISHER>', "${{ inputs.publisher }}")
-            $content = $content.Replace('<PACKAGE-NAME>', "${{ inputs.package-name }}")
-            $content = $content.Replace('<LICENSE>', "${{ inputs.license }}")
-            $content = $content.Replace('<DESCRIPTION>', "${{ inputs.short-description }}")
-            $content | Out-File -Encoding 'UTF8' "./${{ inputs.version }}/$FileName"
-        }
-        if (-not $Token) {
-            return
-        }
-        # Get the latest wingetcreate exe
-        Invoke-WebRequest 'https://aka.ms/wingetcreate/latest/self-contained' -OutFile wingetcreate.exe
-        # Create the PR
-        ./wingetcreate.exe submit --token ${{ inputs.token }} ${{ inputs.version }}
-
+        .\build.ps1 -Token ${{ inputs.token }} -User ${{ inputs.user }} -Package ${{ inputs.package }} -Url ${{ inputs.url }} -ShortDescription ${{ inputs.short-description }} -Version ${{ inputs.version }} -Arch ${{ inputs.arch }} -InstallerType ${{ inputs.installer-type }} -Publisher ${{ inputs.publisher }} -PackageName ${{ inputs.package-name }} -License ${{ inputs.license }}
       if: ${{ inputs.publish-type == 'Create' }}
       shell: pwsh

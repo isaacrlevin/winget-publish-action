@@ -74,7 +74,7 @@ runs:
         $fileHash = Get-Filehash "./file"
         $Hash = $fileHash.Hash
         Get-ChildItem '${{ github.action_path }}\templates\*.yaml' | ForEach-Object -Process {
-            ${{ github.action_path }}\write-metaData -FileName $_.Name -User ${{ inputs.user }} -Package ${{ inputs.package }} -Url ${{ inputs.url }} -ShortDescription "${{ inputs.short-description }}" -Version ${{ inputs.version }} -Arch ${{ inputs.arch }} -InstallerType ${{ inputs.installer-type }} -Publisher "${{ inputs.publisher }}" -PackageName "${{ inputs.package-name }}" -License "${{ inputs.license }}"
+            ${{ github.action_path }}\write-metaData.ps1 -FileName $_.Name -User ${{ inputs.user }} -Hash $Hash -Package ${{ inputs.package }} -Url ${{ inputs.url }} -ShortDescription "${{ inputs.short-description }}" -Version ${{ inputs.version }} -Arch ${{ inputs.arch }} -InstallerType ${{ inputs.installer-type }} -Publisher "${{ inputs.publisher }}" -PackageName "${{ inputs.package-name }}" -License "${{ inputs.license }}"
         }
         if (-not $Token) {
             return

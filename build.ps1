@@ -103,7 +103,7 @@ function Write-MetaData {
 New-Item -Path $PWD -Name $Version -ItemType "directory"
 # Get all files inside the folder and adjust the version/hash
 $Hash = Get-Hash -Url $Url
-Get-ChildItem '*.yaml' | ForEach-Object -Process {
+Get-ChildItem 'templates/*.yaml' | ForEach-Object -Process {
     Write-MetaData -FileName $_.Name -User $User -Package $Package -Url $Url -ShortDescription $ShortDescription
     -Version $Version -Hash $Hash -Arch $Arch -InstallerType $InstallerType -Publisher $Publisher -PackageName $PackageName -License $License
 }

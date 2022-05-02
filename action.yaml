@@ -68,6 +68,21 @@ runs:
 
     - name: Populate Winget manifest files and use WingetCreate Submit to submit manifest
       run: |
-        ${{ github.action_path }}\build.ps1 -Token ${{ inputs.token }} -User ${{ inputs.user }} -Package ${{ inputs.package }} -Url ${{ inputs.url }} -ShortDescription "${{ inputs.short-description }}" -Version ${{ inputs.version }} -Arch ${{ inputs.arch }} -InstallerType ${{ inputs.installer-type }} -Publisher "${{ inputs.publisher }}" -PackageName "${{ inputs.package-name }}" -License "${{ inputs.license }}"
+        New-Item -Path $PWD -Name $Version -ItemType "directory"
+        # Get all files inside the folder and adjust the version/hash
+        Invoke-WebRequest -Uri $Url -OutFile "./file"
+        $fileHash = Get-Filehash "./file"
+        $Hash = $fileHash.Hash
+        Get-ChildItem '$GITHUB_ACTION_PATH\templates\*.yaml' | ForEach-Object -Process {
+            ${{ github.action_path }}\write-metaData -FileName $_.Name -User ${{ inputs.user }} -Package ${{ inputs.package }} -Url ${{ inputs.url }} -ShortDescription "${{ inputs.short-description }}" -Version ${{ inputs.version }} -Arch ${{ inputs.arch }} -InstallerType ${{ inputs.installer-type }} -Publisher "${{ inputs.publisher }}" -PackageName "${{ inputs.package-name }}" -License "${{ inputs.license }}"
+        }
+        if (-not $Token) {
+            return
+        }
+        # Get the latest wingetcreate exe
+        Invoke-WebRequest 'https://aka.ms/wingetcreate/latest/self-contained' -OutFile wingetcreate.exe
+        # Create the PR
+        ./wingetcreate.exe submit --token ${{ inputs.token }} ${{ inputs.version }}
+
       if: ${{ inputs.publish-type == 'Create' }}
       shell: pwsh

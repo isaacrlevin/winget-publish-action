@@ -85,12 +85,9 @@ function Write-MetaData {
         [string]
         $Hash
     )
-    $fName = $FileName.Replace('user',$User)
-    $fName = $FileName.Replace('package',$Package)
-
-
     $content = Get-Content "D:\a\_actions\isaacrlevin\winget-publish-action\v.5\templates\$FileName" -Raw
     $content = $content.Replace('<VERSION>', $Version)
+    $content = $content.Replace('<USER>', $User)
     $content = $content.Replace('<PACKAGE>', $Package)
     $content = $content.Replace('<HASH>', $Hash)
     $content = $content.Replace('<ARCH>', $Arch)
@@ -100,6 +97,10 @@ function Write-MetaData {
     $content = $content.Replace('<PACKAGE-NAME>', $PackageName)
     $content = $content.Replace('<LICENSE>', $License)
     $content = $content.Replace('<DESCRIPTION>', $ShortDescription)
+
+    $fName = $FileName.Replace('user',$User)
+    $fName = $FileName.Replace('package',$Package)
+
     $content | Out-File -Encoding 'UTF8' "./$Version/$fName"
 }
 

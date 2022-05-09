@@ -54,6 +54,11 @@ runs:
   using: "composite"
   steps:
     - run: |
+        echo GitHub Actions Runner needs to be Windows
+        exit 1
+      if: ${{ (runner.os == 'macOS') || (runner.os == 'Linux') }}
+      shell: bash
+    - run: |
         echo Publish Type Specified not Create or Update
         exit 1
       if: ${{ (inputs.publish-type != 'Create') && (inputs.publish-type != 'Update') }}

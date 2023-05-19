@@ -1,5 +1,6 @@
 PackageIdentifier: <USER>.<PACKAGE>
 PackageVersion: <VERSION>
+PackageFamilyName: <FAMILY-NAME>
 Installers:
   - Architecture: <ARCH>
     InstallerType: <INSTALLER-TYPE>

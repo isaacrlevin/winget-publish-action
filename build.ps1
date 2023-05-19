@@ -31,6 +31,8 @@ Param
     [string]
     $ShortDescription,
     [parameter(Mandatory = $true)]
+    $FamilyName,
+    [parameter(Mandatory = $true)]
     [string]
     $Token
 )
@@ -82,11 +84,14 @@ function Write-MetaData {
         [string]
         $ShortDescription,
         [parameter(Mandatory = $true)]
+        $FamilyName,
+        [parameter(Mandatory = $true)]
         [string]
         $Hash
     )
     $content = Get-Content "D:\a\_actions\isaacrlevin\winget-publish-action\v.7\templates\$FileName" -Raw
     $content = $content.Replace('<VERSION>', $Version)
+    $content = $content.Replace('<FAMILY-NAME>', $FamilyName)
     $content = $content.Replace('<USER>', $User)
     $content = $content.Replace('<PACKAGE>', $Package)
     $content = $content.Replace('<HASH>', $Hash)
@@ -107,7 +112,7 @@ function Write-MetaData {
 New-Item -Path $PWD -Name $Version -ItemType "directory"
 $Hash = Get-Hash -Url $Url
 Get-ChildItem 'D:\a\_actions\isaacrlevin\winget-publish-action\v.7\templates\*.yaml' | ForEach-Object -Process {
-    Write-MetaData -FileName $_.Name -User $User -Package $Package -Url $Url -ShortDescription $ShortDescription -Version $Version -Hash $Hash -Arch $Arch -InstallerType $InstallerType -Publisher $Publisher -PackageName $PackageName -License $License
+    Write-MetaData -FileName $_.Name -User $User -Package $Package -Url $Url -ShortDescription $ShortDescription -FamilyName $FamilyName -Version $Version -Hash $Hash -Arch $Arch -InstallerType $InstallerType -Publisher $Publisher -PackageName $PackageName -License $License
 }
 if (-not $Token) {
     return

@@ -6,4 +6,4 @@ Installers:
     InstallerUrl: <URL>
     InstallerSha256: <HASH>
 ManifestType: installer
-ManifestVersion: 1.1.0
+ManifestVersion: 1.4.0

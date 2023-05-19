@@ -106,7 +106,7 @@ function Write-MetaData {
 
 New-Item -Path $PWD -Name $Version -ItemType "directory"
 $Hash = Get-Hash -Url $Url
-Get-ChildItem 'D:\a\_actions\isaacrlevin\winget-publish-action\v.5\templates\*.yaml' | ForEach-Object -Process {
+Get-ChildItem 'D:\a\_actions\isaacrlevin\winget-publish-action\v.7\templates\*.yaml' | ForEach-Object -Process {
     Write-MetaData -FileName $_.Name -User $User -Package $Package -Url $Url -ShortDescription $ShortDescription -Version $Version -Hash $Hash -Arch $Arch -InstallerType $InstallerType -Publisher $Publisher -PackageName $PackageName -License $License
 }
 if (-not $Token) {

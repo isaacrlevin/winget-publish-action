@@ -85,7 +85,7 @@ function Write-MetaData {
         [string]
         $Hash
     )
-    $content = Get-Content "D:\a\_actions\isaacrlevin\winget-publish-action\v.5\templates\$FileName" -Raw
+    $content = Get-Content "D:\a\_actions\isaacrlevin\winget-publish-action\v.8\templates\$FileName" -Raw
     $content = $content.Replace('<VERSION>', $Version)
     $content = $content.Replace('<USER>', $User)
     $content = $content.Replace('<PACKAGE>', $Package)
